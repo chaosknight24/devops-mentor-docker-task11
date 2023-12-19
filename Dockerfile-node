@@ -1,0 +1,27 @@
+# Создаем аргумент NODE_VERSION
+ARG NODE_VERSION
+
+# Используем базовый образ node с использованием аргумента
+FROM node:${NODE_VERSION}
+
+# Устанавливаем рабочую директорию
+WORKDIR /usr/src/app
+
+# Копируем только файл package.json
+COPY package.json .
+
+# Запускаем команду npm install
+RUN npm install
+
+# Копируем все остальные файлы
+COPY . .
+
+# Устанавливаем пользователя как node
+USER node
+
+# Устанавливаем переменные среды с значениями по умолчанию
+ENV SERVER_PORT=3001
+ENV ENV_NAME=test
+
+# Запускаем сервис командой node server.js
+CMD ["node", "server.js"]
